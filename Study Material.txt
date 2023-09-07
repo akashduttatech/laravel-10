@@ -1,0 +1,113 @@
+Composer:
+1. Install composer from https://getcomposer.org/
+2. To check version > open cmd > composer -v
+
+==========Laravel-----------------------------------------------------------------------------------------------------------------------------------------------------------
+1. Create app > cmd > composer create-project laravel/laravel example-app
+2. Run xampp
+3. Run the laravel server > cmd > php artisan serve
+3. Stop the laravel server > cmd > ctrl + c
+4. Check artisan commands > cmd > php artisan
+
+==========Migration==========================================================================================================================
+Migration: Run the database migrations
+1. php artisan migrate --help or php artisan migrate -h
+
+----------Create Table----------
+1. Create migration file > cmd > php artisan make:migration create_school_table
+2. Add schema in 2023_09_05_160017_create_school_table file from migrations folder
+    Schema::create('school', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('class');
+            $table->timestamps();
+        });
+3. Migrate > cmd > php artisan migrate
+*Note: 
+    1. up() > php artisan migrate
+    2. down() > php artisan migrate:rollback
+
+----------Alter Table----------
+1. Create migration file > cmd > php artisan make:migration alter_table_name
+2. up() > Schema::rename('school', 'school_table'); 
+   down() >  Schema::rename('school_table', 'school');
+3. Migrate > cmd > php artisan migrate
+*Note: 
+    1. up() > php artisan migrate
+    2. down() > php artisan migrate:rollback
+
+----------Drop Table----------
+1. Create migration file > cmd > php artisan make:migration drop_table_name
+2. up() > Schema::dropIfExists('school');
+3. Migrate > cmd > php artisan migrate
+*Note: 
+    1. up() > php artisan migrate
+    2. down() > php artisan migrate:rollback
+
+==========Breeze Package==========================================================================================================================
+Laravel Breeze is a minimal, simple implementation of all of Laravel's authentication features
+1. Create laravel breeze package > cmd > composer require laravel/breeze --dev
+2. Install package > cmd > php artisan breeze:install
+3. Setup Database configuration > open .env and configure
+4. Migrate > cmd > php artisan migrate
+
+==========Database MySQL Query==========================================================================================================================
+1. Load > use Illuminate\Support\Facades\DB;
+2. Query:
+    Get users:
+        $response = DB::select('select * from users');
+    Get user:
+        $response = DB::select('select * from users where id = ?', [1]);
+        $response = DB::select('select * from users where email=?', ['akash@gmail.com']);
+        ----------OR----------
+        $response = DB::select('select * from users where email = :email', ['email' => 'akash@gmail.com']);
+    Insert:
+        $response = DB::insert('insert into users (name, email, password) values (?, ?, ?)', ['Marc', 'marc@gmail.com', 'test123']);
+    Update:
+        $response = DB::update("UPDATE users SET name='Raj' WHERE id = 2");
+        ----------OR----------
+        $response = DB::update("UPDATE users SET name=? WHERE id = ?", ['Raj 123', 2]);
+    Delete:
+        $response = DB::delete("DELETE FROM `users` WHERE id = ?", [2]);
+*Note: return type array
+
+==========Laravel Query Builder==========================================================================================================================
+1. Load > use Illuminate\Support\Facades\DB;
+2. Query:
+    Get users:
+        $response = DB::table('users')->get();
+        Show Specific data:
+            $response = DB::table('users')->select('name', 'email as user_email')->get();
+    Get user by id:
+        $response = DB::table('users')->find(2);
+    Get user:
+        $response = DB::table('users')->where('name', 'Akash Dutta')->first();
+        ----------OR----------
+        $response = DB::table('users')->where('email', '=', 'akash@gmail.com')->get();
+    Get email, name as key pair:
+        $response = DB::table('users')->pluck('email', 'name');
+*Note: To get in array form:
+    $response = DB::table('users')->get()->toArray();
+
+    Insert:
+        $response = DB::table('users')->insert(['name' => 'ricky', 'email' => 'ricky@example.com', 'password' => 'abchsg']);
+        Many:
+            $response = DB::table('users')->insert([
+                ['name' => 'bairstow', 'email' => 'bairstow@example.com', 'password' => 'bairstow'],
+                ['name' => 'jack', 'email' => 'jack@example.com', 'password' => 'jack']
+            ]);
+    Update:
+        $response = DB::table('users')->where('id', 9)->update(['name' => 'Raj']);
+    Delete:
+        $response = DB::table('users')->delete();
+        ----------OR----------
+        $response = DB::table('users')->where('id', 9)->delete();
+        ----------OR----------
+        $response = DB::table('users')->where('votes', '>', 100)->delete();
+*Note: return type object
+
+==========Laravel ==========================================================================================================================
+
+
+
+
