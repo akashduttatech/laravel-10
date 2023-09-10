@@ -1,112 +1,450 @@
-Composer:
-1. Install composer from https://getcomposer.org/
+==========Composer==========================================================================================================================
+
+1. Install composer https://gfromcomposer.org/
+
 2. To check version > open cmd > composer -v
 
-==========Laravel-----------------------------------------------------------------------------------------------------------------------------------------------------------
-1. Create app > cmd > composer create-project laravel/laravel example-app
-2. Run xampp
-3. Run the laravel server > cmd > php artisan serve
-3. Stop the laravel server > cmd > ctrl + c
-4. Check artisan commands > cmd > php artisan
+==========Laravel==========================================================================================================================
 
-==========Migration==========================================================================================================================
-Migration: Run the database migrations
+1. Create app > cmd > composer create-project laravel/laravel example-app
+
+2. Run xampp
+
+3. Run the laravel server > cmd > php artisan serve
+
+4. Stop the laravel server > cmd > ctrl + c
+
+5. Check artisan commands > cmd > php artisan
+
+==========Migration==========Migration is used to Run the database migrations================================================================================================================
+
 1. php artisan migrate --help or php artisan migrate -h
 
 ----------Create Table----------
 1. Create migration file > cmd > php artisan make:migration create_school_table
-2. Add schema in 2023_09_05_160017_create_school_table file from migrations folder
-    Schema::create('school', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('class');
-            $table->timestamps();
-        });
+
+2. Open "create_school_table" file from "database/migrations"
+
+3. Add schema:
+                > up() > Schema::create('school', function (Blueprint $table) {
+                            $table->id();
+                            $table->string('name');
+                            $table->string('class');
+                            $table->timestamps();
+                        });
+
 3. Migrate > cmd > php artisan migrate
+
 *Note: 
     1. up() > php artisan migrate
     2. down() > php artisan migrate:rollback
 
 ----------Alter Table----------
+
 1. Create migration file > cmd > php artisan make:migration alter_table_name
-2. up() > Schema::rename('school', 'school_table'); 
-   down() >  Schema::rename('school_table', 'school');
-3. Migrate > cmd > php artisan migrate
+
+2. Open "alter_table_name" file from "database/migrations"
+
+3. Add schema:
+                > up() > Schema::rename('school', 'school_table'); 
+                
+                > down() > Schema::rename('school_table', 'school');
+
+4. Migrate > cmd > php artisan migrate
+
 *Note: 
     1. up() > php artisan migrate
     2. down() > php artisan migrate:rollback
 
 ----------Drop Table----------
+
 1. Create migration file > cmd > php artisan make:migration drop_table_name
-2. up() > Schema::dropIfExists('school');
-3. Migrate > cmd > php artisan migrate
+
+2. Open "drop_table_name" file from "database/migrations"
+
+3. Add schema:
+                > up() > Schema::dropIfExists('school');
+
+4. Migrate > cmd > php artisan migrate
+
 *Note: 
     1. up() > php artisan migrate
     2. down() > php artisan migrate:rollback
 
-==========Breeze Package==========================================================================================================================
-Laravel Breeze is a minimal, simple implementation of all of Laravel's authentication features
+----------Add new field into existing Table----------
+
+1. Create migration file > cmd > php artisan make:migration add_new_field_avatar_to_user_table --table=users
+
+2. Open "add_new_field_avatar_to_user_table" file from "database/migrations"
+
+3. Add schema:
+                > up() > $table->string('avatar')->after('email')->nullable();
+                    # before/after column (email)
+                    # nullable by default
+
+                > down() > $table->dropColumn('avatar');
+
+3. Migrate > cmd > php artisan migrate
+
+*Note: 
+    1. up() > php artisan migrate
+    2. down() > php artisan migrate:rollback
+
+==========Breeze Package==========Laravel Breeze is a minimal, simple implementation of all of Laravel's authentication features================================================================================================================
+
 1. Create laravel breeze package > cmd > composer require laravel/breeze --dev
+
 2. Install package > cmd > php artisan breeze:install
+
 3. Setup Database configuration > open .env and configure
+
 4. Migrate > cmd > php artisan migrate
 
 ==========Database MySQL Query==========================================================================================================================
+
 1. Load > use Illuminate\Support\Facades\DB;
+
 2. Query:
+
     Get users:
-        $response = DB::select('select * from users');
+        > $response = DB::select('select * users');
+
     Get user:
-        $response = DB::select('select * from users where id = ?', [1]);
-        $response = DB::select('select * from users where email=?', ['akash@gmail.com']);
+        > $response = DB::select('select * users whefrom id = ?', [1]);
+
         ----------OR----------
-        $response = DB::select('select * from users where email = :email', ['email' => 'akash@gmail.com']);
+
+        > $response = DB::select('select * users whefrom email=?', ['akash@gmail.com']);
+
+        ----------OR----------
+
+        > $response = DB::select('select * users whefrom email = :email', ['email' => 'akash@gmail.com']);
+    
     Insert:
-        $response = DB::insert('insert into users (name, email, password) values (?, ?, ?)', ['Marc', 'marc@gmail.com', 'test123']);
+        > $response = DB::insert('insert into users (name, email, password) values (?, ?, ?)', ['Marc', 'marc@gmail.com', 'test123']);
+    
     Update:
-        $response = DB::update("UPDATE users SET name='Raj' WHERE id = 2");
+        > $response = DB::update("UPDATE users SET name='Raj' WHERE id = 2");
+        
         ----------OR----------
-        $response = DB::update("UPDATE users SET name=? WHERE id = ?", ['Raj 123', 2]);
+        
+        > $response = DB::update("UPDATE users SET name=? WHERE id = ?", ['Raj 123', 2]);
+    
     Delete:
         $response = DB::delete("DELETE FROM `users` WHERE id = ?", [2]);
+
 *Note: return type array
 
 ==========Laravel Query Builder==========================================================================================================================
-1. Load > use Illuminate\Support\Facades\DB;
+
+1. Import > use Illuminate\Support\Facades\DB;
+
 2. Query:
+
     Get users:
-        $response = DB::table('users')->get();
-        Show Specific data:
-            $response = DB::table('users')->select('name', 'email as user_email')->get();
+        > $response = DB::table('users')->get();
+    
+    Show Specific data:
+        > $response = DB::table('users')->select('name', 'email as user_email')->get();
+    
     Get user by id:
-        $response = DB::table('users')->find(2);
+        > $response = DB::table('users')->find(2);
+    
     Get user:
-        $response = DB::table('users')->where('name', 'Akash Dutta')->first();
+        > $response = DB::table('users')->where('name', 'Akash Dutta')->first();
+
         ----------OR----------
-        $response = DB::table('users')->where('email', '=', 'akash@gmail.com')->get();
+
+        > $response = DB::table('users')->where('email', '=', 'akash@gmail.com')->get();
+    
     Get email, name as key pair:
-        $response = DB::table('users')->pluck('email', 'name');
-*Note: To get in array form:
-    $response = DB::table('users')->get()->toArray();
+        > $response = DB::table('users')->pluck('email', 'name');
+
+*Note: To get in array form > $response = DB::table('users')->get()->toArray();
 
     Insert:
-        $response = DB::table('users')->insert(['name' => 'ricky', 'email' => 'ricky@example.com', 'password' => 'abchsg']);
-        Many:
-            $response = DB::table('users')->insert([
-                ['name' => 'bairstow', 'email' => 'bairstow@example.com', 'password' => 'bairstow'],
-                ['name' => 'jack', 'email' => 'jack@example.com', 'password' => 'jack']
-            ]);
+        > $response = DB::table('users')->insert(['name' => 'ricky', 'email' => 'ricky@example.com', 'password' => 'abchsg']);
+    
+    Insert Many:
+        > $response = DB::table('users')->insert([
+            ['name' => 'bairstow', 'email' => 'bairstow@example.com', 'password' => 'bairstow'],
+            ['name' => 'jack', 'email' => 'jack@example.com', 'password' => 'jack']
+        ]);
+    
     Update:
-        $response = DB::table('users')->where('id', 9)->update(['name' => 'Raj']);
+        > $response = DB::table('users')->where('id', 9)->update(['name' => 'Raj']);
+    
     Delete:
-        $response = DB::table('users')->delete();
+        > $response = DB::table('users')->delete();
+        
         ----------OR----------
-        $response = DB::table('users')->where('id', 9)->delete();
+        
+        > $response = DB::table('users')->where('id', 9)->delete();
+        
         ----------OR----------
-        $response = DB::table('users')->where('votes', '>', 100)->delete();
+        
+        > $response = DB::table('users')->where('votes', '>', 100)->delete();
+
 *Note: return type object
 
-==========Laravel ==========================================================================================================================
+==========Tinker==========Tinker is a command used in Laravel================================================================================================================
+
+1. cmd > php artisan tinker
+
+2. Command:
+    Get users:
+        > $user = User::get()
+   
+    Get user:
+        > $user = User::find(3)
+    
+    Update:
+        > $user = User::find(3)
+        > $user->update(['name'=>'Marc Stark'])
+
+        ----------OR----------
+
+        > $user = User::find(3)
+        > $user->avatar = 'Avatar test'
+        > $user->save()
+    
+    Delete:
+        $user = User::find(3)
+        $user->delete()
+
+*Note:
+    1. Tinker commands works only when there is table as model and field/column as protected $fillable()
+    2. After update rewrite command > php artisan tinker
+
+==========Route==========================================================================================================================
+
+1. Add Route > Route::patch('/profile', [AvatarController::class, 'update'])->name('profile.avatar');
+            # /profile -> url
+            # patch -> get, post, put, patch, delete method
+            # [AvatarController::class, 'update'] -> AvatarController is Controller class and update is function
+            # name('profile.avatar') -> route name
+
+2. Import AvatarController in Route > use App\Http\Controllers\Profile\AvatarController;
+
+*Note: Import shortcut > ctrl+i
+
+==========Form==========================================================================================================================
+
+1. Required to write form
+<form action="{{ route('profile.avatar') }}" method="POST">
+    <input type="hidden" name="_method" value="patch">
+    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+    ----------OR----------
+    @method('patch')
+    @csrf
+</form>
+
+*Note: 419 | PAGE EXPIRED - csrf not added
+
+==========Controller==========================================================================================================================
+
+1. Create controller > cmd > php artisan make:controller Profile/AvatarController
+    # Profile is the folder
+    # AvatarController is the controller
+
+==========Redirect==========================================================================================================================
+
+1. Call a method from other method > $this->method2();
+
+2. Pass a parameter to other method > $this->method2('test');
+
+3. Redirect using url > return redirect('/profile');
+
+4. Redirecting To Named Routes > return redirect(route('profile.edit'));
+
+5. Redirect with session/message:
+                                > return back()->with('status', 'Profile updated!');
+                                    ----------OR----------
+                                > return redirect('profile')->with('status', 'Profile updated!');
+
+6. view page:
+                > @if (session('status'))
+                    <div class="alert alert-success">
+                        {{ session('status') }}
+                    </div>
+                @endif
+
+==========Input==========================================================================================================================
+
+1. Retrieving all input data as array > $request->all()
+
+2. Retrieving all input data as collection > $request->collect()
+
+3. Retrieving An Input Value > $request->input('name')
+
+4. Pass a default value as the second argument > $request->input('name', 'Akash')
+
+==========Form Validation==========================================================================================================================
+
+1. Add "Request $request" in method as parameter > public function update(Request $request){}
+
+2. Add validation:
+                    > $request->validate([
+                        'avatar' => 'required|file',
+                        'age' => 'required',
+                    ]);
+                    
+                    ----------OR----------
+                    
+                    > $request->validate([
+                        'avatar' => ['required', 'file'],
+                        'age' => ['required']
+                    ]);
+
+*Note: Use pipe or array
+
+----------Form Request Class----------
+
+1. cmd > php artisan make:request UpdateAvatarRequest
+        # Update : Method name
+        # Avatar : Class name
+        # Request : Request name
+
+2. Open UpdateAvatarRequest file from "Http/Requests"
+
+3. Add Rule in rules():
+                        > public function rules(): array
+                        {
+                            return [
+                                'avatar' => 'required|file',
+                                'age' => 'required',
+                            ];
+                        }
+
+4. Add UpdateAvatarRequest instead of Request as a parameter in method:
+                        > public function update(UpdateAvatarRequest $request){}
+
+5. Import UpdateAvatarRequest in Controller > use App\Http\Requests\UpdateAvatarRequest;
+
+6. Set authorize() as return true;
+
+*Note: 
+    1. 403 | THIS ACTION IS UNAUTHORIZED - Authorizing Form Requests > set authorize() as return true or add logic
+    2. UpdateAvatarRequest class is doing all the logic and validation
+
+----------Custom Validation----------
+
+TODO
+
+
+
+==========Validation Error==========================================================================================================================
+
+TODO
+
+==========File storage==========================================================================================================================
+
+----------Store----------
+
+1. Check file storage location > config/filesystem.php > disc:
+                                                                > local > 'root' => storage_path('app')
+                                                                > public > 'root' => storage_path('app/public')
+
+2. Store a file:
+    > Storage::disk('public')->put('images', $request->file('avatar'));
+
+    # public : disk name
+    # images : folder name
+    # avatar : input field name
+
+    ----------OR----------
+
+    > $request->file('avatar')->store('public/images')
+            
+    # avatar : input field name
+    # images : folder name
+    # public/images : folder name
+
+*Note: Path will be "public/images/KT45s06175bwu3oydCcavqsTmS59aVTqlfuQ1P7L.jpg"
+
+    ----------OR----------
+
+    > $request->file('avatar')->store('images', 'public')
+    
+    # avatar : input field name
+    # images : folder name
+    # public : disc name
+
+*Note: 
+    1. Path will be "images/Cv1wntchsT5bst9wa0gJNb6OsupsYHW8dvw8Wet3.jpg"
+    2. It will create inside storage by default
+    3. Must use the 1st one
+
+3. Update table using inbuilt method: 
+
+            > $path = Storage::disk('public')->put('images', $request->file('avatar'));
+            
+            > auth()->user()->update([
+                'avatar' => $path,
+                'age' => $request->input('age')
+            ]);
+            
+            ----------OR----------
+
+            > $path = $request->file('avatar')->store('public/images');
+
+            > auth()->user()->update([
+                'avatar' => storage_path('app/' . $path),
+                'age' => $request->input('age')
+            ]);
+            
+            ----------OR----------
+            
+            > $path = $request->file('avatar')->store('images', 'public');
+
+            > auth()->user()->update([
+                'avatar' => storage_path('app/' . $path),
+                'age' => $request->input('age')
+            ]);
+            
+4. Add/Update "avatar, age" in User model fillable > protected $fillable = [
+                                                        'name',
+                                                        'email',
+                                                        'avatar',
+                                                        'age',
+                                                        'password',
+                                                    ];
+
+*Note: Check current user > var_dump(auth()->user());
+
+----------Retrieve----------
+
+*Note: It is a folder convention, you should create a symbolic link from public/storage to storage/app/public
+
+1. cmd > php artisan storage:link
+
+*Note: 
+    1. It will create a shortcut/folder inside "public/storage", means "public/storage" is a link to "storage/app/public" folder
+    2. If you delete "public/storage", it will automatically delete "storage/app/public" folder
+
+2. Retrieve file:
+                    > <?php echo "storage/" . $user->avatar; ?>
+                    
+                    ----------OR----------
+                    
+                    > <img src="{{"storage/$user->avatar"}}" alt="user avatar">
+                    
+----------Delete old file----------
+
+1. Use disk:
+            > Storage::disk('public')->delete('image-name.jpg');
+            
+            # public : disc name
+
+2. Import Storage > use Illuminate\Support\Facades\Storage;
+    
+    example:
+            > if ($oldAvatar = auth()->user()->avatar) {
+                    Storage::disk('public')->delete($oldAvatar);
+                }
+
+==========Laravel==========================================================================================================================
+
 
 
 
